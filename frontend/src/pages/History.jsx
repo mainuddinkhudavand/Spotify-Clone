@@ -48,7 +48,7 @@ const History = () => {
           background: 'linear-gradient(135deg, #555, #111)',
           display: 'flex',
           alignItems: 'center',
-          justifycontent: 'center',
+          justifyContent: 'center',
           boxShadow: '0 12px 30px rgba(0,0,0,0.5)'
         }}>
           <i className="fa-solid fa-clock-rotate-left" style={{ fontSize: '4.5rem', color: '#b3b3b3' }}></i>

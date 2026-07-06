@@ -73,7 +73,7 @@ const Favorites = () => {
           background: 'linear-gradient(135deg, #450af5, #c4efd9)',
           display: 'flex',
           alignItems: 'center',
-          justify-content: 'center',
+          justifyContent: 'center',
           boxShadow: '0 12px 30px rgba(0,0,0,0.5)'
         }}>
           <i className="fa-solid fa-heart" style={{ fontSize: '4.5rem', color: '#fff' }}></i>
@@ -104,7 +104,7 @@ const Favorites = () => {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifycontent: 'center',
+                justifyContent: 'center',
                 boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
                 transition: 'transform 0.1s ease'
               }}

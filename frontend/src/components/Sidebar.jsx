@@ -87,8 +87,8 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
               borderRadius: '4px',
               background: 'linear-gradient(135deg, #450af5, #c4efd9)',
               display: 'flex',
-              align-items: 'center',
-              justify-content: 'center'
+              alignItems: 'center',
+              justifyContent: 'center'
             }}>
               <i className="fa-solid fa-heart" style={{ color: '#fff', fontSize: '1rem' }}></i>
             </div>
@@ -109,8 +109,8 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
               borderRadius: '4px',
               background: 'linear-gradient(135deg, #333, #111)',
               display: 'flex',
-              align-items: 'center',
-              justify-content: 'center'
+              alignItems: 'center',
+              justifyContent: 'center'
             }}>
               <i className="fa-solid fa-clock-rotate-left" style={{ color: '#b3b3b3', fontSize: '1rem' }}></i>
             </div>
