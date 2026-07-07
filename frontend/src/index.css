@@ -1176,3 +1176,8 @@ select {
 .player-control-icon.active i {
   color: #1ed760 !important;
 }
+
+/* Profile Avatar Hover Upload Overlay */
+.profile-avatar-container:hover .upload-overlay {
+  opacity: 1 !important;
+}

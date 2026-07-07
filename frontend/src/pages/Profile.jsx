@@ -6,6 +6,7 @@ const Profile = ({ setActiveTab }) => {
 
   const [editUsername, setEditUsername] = useState(user?.username || '');
   const [editEmail, setEditEmail] = useState(user?.email || '');
+  const [profilePic, setProfilePic] = useState(user?.profilePic || '');
   const [playlistsCount, setPlaylistsCount] = useState(0);
   const [loadingStats, setLoadingStats] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
@@ -17,8 +18,24 @@ const Profile = ({ setActiveTab }) => {
     if (user) {
       setEditUsername(user.username);
       setEditEmail(user.email);
+      setProfilePic(user.profilePic || '');
     }
   }, [user]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setErrorMsg('Image size should be less than 2MB');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -55,7 +72,7 @@ const Profile = ({ setActiveTab }) => {
       return;
     }
 
-    const res = await updateProfile(editUsername, editEmail);
+    const res = await updateProfile(editUsername, editEmail, profilePic);
     if (res.success) {
       setSuccessMsg('Profile updated successfully!');
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -85,21 +102,55 @@ const Profile = ({ setActiveTab }) => {
         margin: '-1rem -1.5rem 1rem -1.5rem',
         padding: '2.5rem 1.5rem 1.5rem 1.5rem'
       }}>
-        <div style={{
-          width: '192px',
-          height: '192px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #1ed760, #0c5c29)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
-          fontSize: '4.5rem',
-          fontWeight: 'bold',
-          color: '#fff'
-        }}>
-          {avatarLetter}
+        <div 
+          onClick={() => document.getElementById('profile-pic-input').click()}
+          style={{
+            width: '192px',
+            height: '192px',
+            borderRadius: '50%',
+            background: profilePic ? `url(${profilePic}) center/cover no-repeat` : 'linear-gradient(135deg, #1ed760, #0c5c29)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 12px 30px rgba(0,0,0,0.5)',
+            fontSize: '4.5rem',
+            fontWeight: 'bold',
+            color: '#fff',
+            cursor: 'pointer',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          className="profile-avatar-container"
+        >
+          {!profilePic && avatarLetter}
+          <div className="upload-overlay" style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.6)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            opacity: 0,
+            transition: 'opacity 0.2s ease',
+            fontSize: '0.9rem',
+            color: '#fff',
+            fontWeight: 'normal'
+          }}>
+            <i className="fa-solid fa-camera" style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}></i>
+            <span>Upload Photo</span>
+          </div>
         </div>
+        <input 
+          type="file" 
+          id="profile-pic-input" 
+          accept="image/*" 
+          onChange={handleFileChange} 
+          style={{ display: 'none' }}
+        />
         <div className="details-metadata">
           <span className="details-type">Profile</span>
           <span className="details-title">{user.username}</span>
@@ -197,6 +248,19 @@ const Profile = ({ setActiveTab }) => {
                 style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #727272', backgroundColor: '#121212', color: '#fff', outline: 'none' }}
               />
             </div>
+
+            {profilePic && (
+              <div className="form-group" style={{ margin: '0.5rem 0 0 0' }}>
+                <button 
+                  type="button" 
+                  className="badge" 
+                  onClick={() => setProfilePic('')}
+                  style={{ backgroundColor: '#ff4d4d', color: '#fff', fontWeight: 'bold', width: 'auto', padding: '0.4rem 1.25rem', fontSize: '0.75rem', border: 'none', cursor: 'pointer', margin: 0 }}
+                >
+                  Remove Profile Photo
+                </button>
+              </div>
+            )}
 
             <button 
               type="submit" 
