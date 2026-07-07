@@ -1237,4 +1237,55 @@ select {
   .mobile-bottom-nav button.active i {
     color: #1ed760;
   }
+
+  .music-player {
+    bottom: 60px !important;
+    height: 70px !important;
+    padding: 0 1rem !important;
+    background-color: #090909 !important;
+    border-top: 1px solid #181818;
+  }
+
+  /* Simplify music player controls on mobile */
+  .music-player .controls {
+    display: none !important;
+  }
+
+  .music-player .volume-bar-container {
+    display: none !important;
+  }
+
+  .music-player .player {
+    width: auto !important;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .music-player .player-controls {
+    gap: 1rem !important;
+  }
+
+  .music-player .playback-bar {
+    display: none !important;
+  }
+
+  .music-player .album {
+    width: 70% !important;
+  }
+}
+
+/* Extra small mobile layout optimizations */
+@media (max-width: 480px) {
+  .sticky-nav-options .nav-item {
+    display: none !important;
+  }
+  
+  .details-title {
+    font-size: 1.75rem !important;
+  }
+  
+  .card {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
 }
