@@ -143,7 +143,7 @@ const History = () => {
               <tr>
                 <th>#</th>
                 <th>Title</th>
-                <th>Album</th>
+                <th className="songs-table-album">Album</th>
                 <th>Played At</th>
                 <th style={{ textAlign: 'center' }}><i className="fa-regular fa-clock"></i></th>
                 <th></th>

@@ -1289,3 +1289,138 @@ select {
     flex: 1 1 100% !important;
   }
 }
+
+/* Notification badge on bell icon */
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #f23f43;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Notification Popover Dropdown */
+.notifications-popover {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 280px;
+  background-color: #282828;
+  border: 1px solid #3e3e3e;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.notifications-popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #3e3e3e;
+  background-color: #1e1e1e;
+}
+
+.notifications-popover-header h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.notifications-popover-header button {
+  background: transparent;
+  border: none;
+  color: #b3b3b3;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.notifications-popover-header button:hover {
+  color: #fff;
+  background-color: rgba(255,255,255,0.05);
+}
+
+.notifications-popover-body {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.no-notifications {
+  text-align: center;
+  padding: 20px;
+  color: #b3b3b3;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.notification-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background-color: rgba(255,255,255,0.05);
+}
+
+.notification-text {
+  font-size: 0.8rem;
+  color: #e6e6e6;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.notification-time {
+  font-size: 0.65rem;
+  color: #b3b3b3;
+  align-self: flex-end;
+}
+
+/* Extra Mobile Responsiveness Polish */
+@media (max-width: 576px) {
+  .songs-table-album {
+    display: none !important;
+  }
+
+  .modal-content {
+    width: 90% !important;
+    padding: 1.25rem !important;
+    gap: 1rem !important;
+  }
+
+  .details-metadata {
+    align-items: center;
+  }
+
+  .sticky-nav-icons img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-nav-icons {
+    display: none !important; /* Hide navigation arrows to make space for Logo/Avatar */
+  }
+}
