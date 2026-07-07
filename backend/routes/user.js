@@ -133,4 +133,47 @@ router.delete('/history', protect, async (req, res) => {
   }
 });
 
+// @desc    Update user profile
+// @route   PUT /api/user/profile
+// @access  Private
+router.put('/profile', protect, async (req, res) => {
+  const { username, email } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (username) {
+      const existingUser = await User.findOne({ username, _id: { $ne: req.user.id } });
+      if (existingUser) {
+        return res.status(400).json({ message: 'Username is already taken' });
+      }
+      user.username = username;
+    }
+
+    if (email) {
+      const existingEmail = await User.findOne({ email, _id: { $ne: req.user.id } });
+      if (existingEmail) {
+        return res.status(400).json({ message: 'Email is already registered' });
+      }
+      user.email = email;
+    }
+
+    await user.save();
+    
+    res.json({
+      _id: user.id,
+      username: user.username,
+      email: user.email,
+      likedSongs: user.likedSongs,
+      history: user.history
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 module.exports = router;
