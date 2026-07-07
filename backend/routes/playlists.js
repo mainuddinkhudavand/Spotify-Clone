@@ -39,7 +39,7 @@ router.post('/', protect, async (req, res) => {
       coverUrl: coverUrl || undefined,
       creator: req.user.id,
       isPublic: isPublic || false,
-      songs: []
+      songs: req.body.songs || []
     });
 
     res.status(201).json(playlist);

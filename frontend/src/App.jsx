@@ -71,7 +71,7 @@ const MainApp = () => {
 
   const renderContent = () => {
     if (activeTab === 'home') {
-      return <Home />;
+      return <Home setActiveTab={setActiveTab} />;
     } else if (activeTab === 'search') {
       return <Search />;
     } else if (activeTab === 'favorites') {
