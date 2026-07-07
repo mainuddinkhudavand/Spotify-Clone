@@ -1,10 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { PlayerContext } from '../context/PlayerContext';
 import { AuthContext } from '../context/AuthContext';
 
 const History = () => {
   const { playSong, currentSong, isPlaying } = useContext(PlayerContext);
-  const { history, likedSongs, likeSong, unlikeSong, user } = useContext(AuthContext);
+  const { history, likedSongs, likeSong, unlikeSong, user, clearHistory } = useContext(AuthContext);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredHistory = history.filter(item => {
+    if (!item.song) return false;
+    const query = searchQuery.toLowerCase();
+    return (
+      item.song.title.toLowerCase().includes(query) ||
+      item.song.artist.toLowerCase().includes(query) ||
+      item.song.album.toLowerCase().includes(query)
+    );
+  });
+
+  const historySongs = filteredHistory.map(item => item.song);
 
   const formatDuration = (secs) => {
     const minutes = Math.floor(secs / 60);
@@ -58,27 +71,89 @@ const History = () => {
           <span className="details-title">Listening History</span>
           <span className="details-description">Keep track of your recently played songs.</span>
           <span className="details-stats">
-            {user.username} <span className="bullet">•</span> {history.length} songs recently played
+            {user.username} <span className="bullet">•</span> {history.length} songs recently played{searchQuery && ` (${filteredHistory.length} matches)`}
           </span>
         </div>
       </div>
 
       {history.length > 0 ? (
-        <table className="songs-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Album</th>
-              <th>Played At</th>
-              <th style={{ textAlign: 'center' }}><i className="fa-regular fa-clock"></i></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {history.map((item, index) => {
-              const song = item.song;
-              if (!song) return null;
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', padding: '1rem 0', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+              {historySongs.length > 0 && (
+                <button 
+                  onClick={() => playSong(historySongs[0], historySongs)}
+                  style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '50%',
+                    backgroundColor: '#1ed760',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                    transition: 'transform 0.1s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                  onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                >
+                  <i className="fa-solid fa-play" style={{ color: '#000', fontSize: '1.5rem', marginLeft: '5px' }}></i>
+                </button>
+              )}
+              <button 
+                onClick={() => {
+                  if (window.confirm("Are you sure you want to clear your listening history?")) {
+                    clearHistory();
+                  }
+                }}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid #ff4d4d',
+                  color: '#ff4d4d',
+                  padding: '0.4rem 1rem',
+                  borderRadius: '100px',
+                  fontSize: '0.8rem',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}
+              >
+                Clear History
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {/* Search Bar */}
+              <div className="search-container" style={{ margin: 0, height: '40px', width: '240px', backgroundColor: '#242424' }}>
+                <i className="fa-solid fa-magnifying-glass"></i>
+                <input 
+                  type="text" 
+                  className="search-input" 
+                  placeholder="Search in history"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{ width: '80%', background: 'transparent', border: 'none', color: '#fff', outline: 'none' }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <table className="songs-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Album</th>
+                <th>Played At</th>
+                <th style={{ textAlign: 'center' }}><i className="fa-regular fa-clock"></i></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredHistory.map((item, index) => {
+                const song = item.song;
+                if (!song) return null;
 
               const isSongPlaying = currentSong && currentSong._id === song._id && isPlaying;
               const isSongActive = currentSong && currentSong._id === song._id;
@@ -130,6 +205,7 @@ const History = () => {
             })}
           </tbody>
         </table>
+        </>
       ) : (
         <div style={{ textAlign: 'center', padding: '3rem' }}>
           <p style={{ opacity: 0.6, fontSize: '0.95rem' }}>No recently played songs found. Play some music to start tracking history!</p>

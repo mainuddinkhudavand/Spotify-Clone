@@ -113,4 +113,24 @@ router.get('/history', protect, async (req, res) => {
   }
 });
 
+// @desc    Clear user's listening history
+// @route   DELETE /api/user/history
+// @access  Private
+router.delete('/history', protect, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.history = [];
+    await user.save();
+
+    res.json({ message: 'Listening history cleared successfully', history: [] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 module.exports = router;

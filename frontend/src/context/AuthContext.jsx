@@ -175,6 +175,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const clearHistory = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch(`${API_URL}/user/history`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        setHistory([]);
+      }
+    } catch (error) {
+      console.error('Error clearing history:', error);
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -187,7 +204,8 @@ export const AuthProvider = ({ children }) => {
       logout,
       likeSong,
       unlikeSong,
-      addSongToHistory
+      addSongToHistory,
+      clearHistory
     }}>
       {children}
     </AuthContext.Provider>
