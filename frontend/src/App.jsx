@@ -145,6 +145,38 @@ const MainApp = () => {
           </div>
         </div>
       )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="mobile-bottom-nav">
+        <button 
+          onClick={() => setActiveTab('home')} 
+          className={activeTab === 'home' ? 'active' : ''}
+        >
+          <i className="fa-solid fa-house"></i>
+          <span>Home</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('search')} 
+          className={activeTab === 'search' ? 'active' : ''}
+        >
+          <i className="fa-solid fa-magnifying-glass"></i>
+          <span>Search</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('favorites')} 
+          className={activeTab === 'favorites' ? 'active' : ''}
+        >
+          <i className="fa-solid fa-heart"></i>
+          <span>Liked</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('profile')} 
+          className={activeTab === 'profile' ? 'active' : ''}
+        >
+          <i className="fa-regular fa-user"></i>
+          <span>Profile</span>
+        </button>
+      </div>
     </div>
   );
 };
