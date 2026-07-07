@@ -9,6 +9,43 @@ const Playlists = ({ playlistId, setActiveTab, onPlaylistsUpdated }) => {
   const [playlist, setPlaylist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+  const [editIsPublic, setEditIsPublic] = useState(false);
+
+  const handleSaveDetails = async (e) => {
+    e.preventDefault();
+    if (!editTitle.trim()) return;
+
+    try {
+      const res = await fetch(`${API_URL}/playlists/${playlistId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: editTitle,
+          description: editDesc,
+          isPublic: editIsPublic
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setPlaylist(data);
+        setShowEditModal(false);
+        if (onPlaylistsUpdated) {
+          onPlaylistsUpdated();
+        }
+      } else {
+        alert("Failed to update playlist");
+      }
+    } catch (error) {
+      console.error("Error updating playlist:", error);
+    }
+  };
 
   const API_URL = 'http://localhost:5000/api';
   const dropdownRef = useRef(null);
@@ -171,21 +208,43 @@ const Playlists = ({ playlistId, setActiveTab, onPlaylistsUpdated }) => {
         </div>
 
         {isOwner && (
-          <button 
-            onClick={handleDeletePlaylist}
-            style={{
-              background: 'transparent',
-              border: '1px solid #ff4d4d',
-              color: '#ff4d4d',
-              padding: '0.4rem 1rem',
-              borderRadius: '100px',
-              fontSize: '0.8rem',
-              fontWeight: '700',
-              cursor: 'pointer'
-            }}
-          >
-            Delete Playlist
-          </button>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button 
+              onClick={() => {
+                setEditTitle(playlist.title);
+                setEditDesc(playlist.description || '');
+                setEditIsPublic(playlist.isPublic || false);
+                setShowEditModal(true);
+              }}
+              style={{
+                background: 'transparent',
+                border: '1px solid #b3b3b3',
+                color: '#fff',
+                padding: '0.4rem 1rem',
+                borderRadius: '100px',
+                fontSize: '0.8rem',
+                fontWeight: '700',
+                cursor: 'pointer'
+              }}
+            >
+              Edit Details
+            </button>
+            <button 
+              onClick={handleDeletePlaylist}
+              style={{
+                background: 'transparent',
+                border: '1px solid #ff4d4d',
+                color: '#ff4d4d',
+                padding: '0.4rem 1rem',
+                borderRadius: '100px',
+                fontSize: '0.8rem',
+                fontWeight: '700',
+                cursor: 'pointer'
+              }}
+            >
+              Delete Playlist
+            </button>
+          </div>
         )}
       </div>
 
@@ -284,6 +343,58 @@ const Playlists = ({ playlistId, setActiveTab, onPlaylistsUpdated }) => {
           >
             Search Songs
           </button>
+        </div>
+      )}
+      {/* Edit Playlist Modal */}
+      {showEditModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3 className="modal-title">Edit Playlist Details</h3>
+            <form onSubmit={handleSaveDetails} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="form-group">
+                <label>Name</label>
+                <input 
+                  type="text" 
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  placeholder="Playlist Name"
+                  required
+                  autoFocus
+                />
+              </div>
+              <div className="form-group">
+                <label>Description (Optional)</label>
+                <input 
+                  type="text" 
+                  value={editDesc}
+                  onChange={(e) => setEditDesc(e.target.value)}
+                  placeholder="Add a description"
+                />
+              </div>
+              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                <input 
+                  type="checkbox" 
+                  id="editIsPublic"
+                  checked={editIsPublic}
+                  onChange={(e) => setEditIsPublic(e.target.checked)}
+                  style={{ width: 'auto', cursor: 'pointer' }}
+                />
+                <label htmlFor="editIsPublic" style={{ cursor: 'pointer', userSelect: 'none', margin: 0, fontSize: '0.85rem' }}>Make Public</label>
+              </div>
+              <div className="modal-buttons">
+                <button 
+                  type="button" 
+                  className="modal-btn modal-btn-cancel"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="modal-btn modal-btn-submit">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
