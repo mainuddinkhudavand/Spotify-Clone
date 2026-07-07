@@ -8,6 +8,9 @@ export const AuthProvider = ({ children }) => {
   const [likedSongs, setLikedSongs] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: 'Welcome to Spotify!', time: new Date() }
+  ]);
 
   const API_URL = 'http://localhost:5000/api';
 
@@ -221,6 +224,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const addNotification = (text) => {
+    setNotifications(prev => [
+      { id: Date.now(), text, time: new Date() },
+      ...prev.slice(0, 19)
+    ]);
+  };
+
+  const clearNotifications = () => {
+    setNotifications([]);
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -235,7 +249,10 @@ export const AuthProvider = ({ children }) => {
       unlikeSong,
       addSongToHistory,
       clearHistory,
-      updateProfile
+      updateProfile,
+      notifications,
+      addNotification,
+      clearNotifications
     }}>
       {children}
     </AuthContext.Provider>
