@@ -133,5 +133,95 @@ module.exports = [
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3",
     coverUrl: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?q=80&w=400&auto=format&fit=crop",
     category: "recently-played"
+  },
+  {
+    title: "Morning Sun",
+    artist: "Early Bird",
+    album: "Rise & Shine",
+    duration: 215, // 3:35
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?q=80&w=400&auto=format&fit=crop",
+    category: "featured"
+  },
+  {
+    title: "Afternoon Walk",
+    artist: "City Wanderer",
+    album: "Streets of Gold",
+    duration: 250, // 4:10
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=400&auto=format&fit=crop",
+    category: "recently-played"
+  },
+  {
+    title: "Dreamcatcher",
+    artist: "Sleepy Head",
+    album: "Nighttime Stories",
+    duration: 280, // 4:40
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=400&auto=format&fit=crop",
+    category: "trending"
+  },
+  {
+    title: "Focus Flow",
+    artist: "Productive Mind",
+    album: "Deep Work Session",
+    duration: 310, // 5:10
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=400&auto=format&fit=crop",
+    category: "popular"
+  },
+  {
+    title: "Golden Hour",
+    artist: "Sunset Dreamer",
+    album: "Dusk Beats",
+    duration: 260, // 4:20
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=400&auto=format&fit=crop",
+    category: "trending"
+  },
+  {
+    title: "Electric Storm",
+    artist: "Lightning Bolt",
+    album: "Thunderous Sky",
+    duration: 290, // 4:50
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=400&auto=format&fit=crop",
+    category: "trending"
+  },
+  {
+    title: "Ocean Wave",
+    artist: "Deep Dive",
+    album: "Submarine Journey",
+    duration: 320, // 5:20
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop",
+    category: "featured"
+  },
+  {
+    title: "Forest Rain",
+    artist: "Nature Sounds",
+    album: "Woodland Sanctuary",
+    duration: 240, // 4:00
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=400&auto=format&fit=crop",
+    category: "featured"
+  },
+  {
+    title: "Chill Cafe",
+    artist: "Jazz Club",
+    album: "Coffee & Saxophone",
+    duration: 270, // 4:30
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=400&auto=format&fit=crop",
+    category: "popular"
+  },
+  {
+    title: "Retro Arcade",
+    artist: "Pixel Beats",
+    album: "8-Bit Nostalgia",
+    duration: 220, // 3:40
+    audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3",
+    coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop",
+    category: "recently-played"
   }
 ];
