@@ -9,6 +9,7 @@ const MusicPlayer = () => {
     progress,
     duration,
     volume,
+    playlist,
     playSong,
     togglePlay,
     nextTrack,
@@ -23,6 +24,7 @@ const MusicPlayer = () => {
 
   const { likedSongs, likeSong, unlikeSong, user } = useContext(AuthContext);
   const [showLyrics, setShowLyrics] = useState(false);
+  const [showQueue, setShowQueue] = useState(false);
 
   const getMockLyrics = (title, artist) => {
     return [
@@ -165,8 +167,22 @@ const MusicPlayer = () => {
         >
           <i className="fa-solid fa-microphone nav-item"></i>
         </button>
-        <button title="Queue"><i className="fa-solid fa-list-ul nav-item hide"></i></button>
-        <button title="Connect"><i className="fa-solid fa-laptop-code nav-item hide"></i></button>
+        <button 
+          title="Queue"
+          onClick={() => setShowQueue(!showQueue)}
+          className={`player-control-icon ${showQueue ? 'active' : ''}`}
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
+        >
+          <i className="fa-solid fa-list-ul nav-item"></i>
+        </button>
+        <button 
+          title="Connect"
+          onClick={() => alert("Mock Connect: Scanning for nearby audio devices... Connected to Spotify Web Player.")}
+          className="player-control-icon"
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
+        >
+          <i className="fa-solid fa-laptop-code nav-item"></i>
+        </button>
         <div className="volume-bar-container">
           {volume === 0 ? (
             <i className="fa-solid fa-volume-xmark" onClick={() => setVolume(0.5)}></i>
@@ -242,6 +258,111 @@ const MusicPlayer = () => {
                 {line}
               </p>
             ))}
+          </div>
+        </div>
+      {/* Playback Queue Panel */}
+      {showQueue && (
+        <div style={{
+          position: 'fixed',
+          bottom: '100px',
+          right: '200px',
+          width: '320px',
+          height: '380px',
+          backgroundColor: '#181818',
+          border: '1px solid #282828',
+          borderRadius: '8px',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
+          zIndex: 1000,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0.8rem 1rem',
+            borderBottom: '1px solid #282828',
+            backgroundColor: '#121212'
+          }}>
+            <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#1ed760', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <i className="fa-solid fa-list-ul"></i> Playback Queue
+            </span>
+            <button 
+              onClick={() => setShowQueue(false)}
+              style={{ background: 'transparent', border: 'none', color: '#b3b3b3', cursor: 'pointer', fontSize: '0.9rem' }}
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '0.5rem'
+          }}>
+            {playlist && playlist.length > 0 ? (
+              playlist.map((song, idx) => {
+                const isCurrent = currentSong && currentSong._id === song._id;
+                return (
+                  <div 
+                    key={`${song._id}-${idx}`}
+                    onClick={() => playSong(song, playlist)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      backgroundColor: isCurrent ? '#282828' : 'transparent',
+                      transition: 'background-color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => { if (!isCurrent) e.currentTarget.style.backgroundColor = '#202020'; }}
+                    onMouseLeave={(e) => { if (!isCurrent) e.currentTarget.style.backgroundColor = 'transparent'; }}
+                  >
+                    <span style={{
+                      fontSize: '0.8rem',
+                      color: isCurrent ? '#1ed760' : '#b3b3b3',
+                      width: '16px',
+                      textAlign: 'center'
+                    }}>
+                      {isCurrent ? <i className="fa-solid fa-volume-high"></i> : idx + 1}
+                    </span>
+                    <img 
+                      src={song.coverUrl} 
+                      style={{ width: '36px', height: '36px', borderRadius: '4px', objectFit: 'cover' }} 
+                      alt="" 
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1 }}>
+                      <span style={{
+                        fontSize: '0.8rem',
+                        fontWeight: 'bold',
+                        color: isCurrent ? '#1ed760' : '#fff',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}>
+                        {song.title}
+                      </span>
+                      <span style={{
+                        fontSize: '0.7rem',
+                        color: '#b3b3b3',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}>
+                        {song.artist}
+                      </span>
+                    </div>
+                    <span style={{ fontSize: '0.75rem', color: '#b3b3b3' }}>
+                      {formatTime(song.duration)}
+                    </span>
+                  </div>
+                );
+              })
+            ) : (
+              <p style={{ opacity: 0.6, fontSize: '0.8rem', padding: '1rem', textAlign: 'center' }}>Queue is empty</p>
+            )}
           </div>
         </div>
       )}
