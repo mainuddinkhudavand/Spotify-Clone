@@ -64,7 +64,7 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
             onClick={() => setActiveTab('favorites')}
             style={{ cursor: 'pointer' }}
           >
-            <img src="/assets/library_icon.png" alt="Library" />
+            <img src="assets/library_icon.png" alt="Library" />
             <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setActiveTab('favorites'); }}>Your Library</a>
           </div>
           <div className="icons">
@@ -134,7 +134,7 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
                   className={`sidebar-playlist-item ${activeTab === `playlist-${pl._id}` ? 'active' : ''}`}
                   onClick={() => handlePlaylistClick(pl._id)}
                 >
-                  <img src={pl.coverUrl || '/assets/card3img.jpeg'} alt={pl.title} />
+                  <img src={pl.coverUrl || 'assets/card3img.jpeg'} alt={pl.title} />
                   <div className="sidebar-playlist-info">
                     <span className="sidebar-playlist-title">{pl.title}</span>
                     <span className="sidebar-playlist-type">Playlist • {pl.creator?.username || 'You'}</span>

@@ -10,13 +10,13 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     <div className="sticky-nav">
       <div className="sticky-nav-icons">
         <img 
-          src="/assets/backward_icon.png" 
+          src="assets/backward_icon.png" 
           alt="Back" 
           onClick={() => setActiveTab('home')} 
           style={{ cursor: 'pointer' }}
         />
         <img 
-          src="/assets/forward_icon.png" 
+          src="assets/forward_icon.png" 
           alt="Forward" 
           className="hide" 
         />

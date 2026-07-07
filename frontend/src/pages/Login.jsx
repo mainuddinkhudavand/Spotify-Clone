@@ -32,7 +32,7 @@ const Login = ({ setActiveTab }) => {
       <div className="auth-card">
         <div className="auth-header">
           {/* Re-use logo image if present, otherwise text banner */}
-          <img src="/assets/logo.png" className="auth-logo" alt="Spotify" onError={(e) => e.target.style.display = 'none'} />
+          <img src="assets/logo.png" className="auth-logo" alt="Spotify" onError={(e) => e.target.style.display = 'none'} />
           <h1 className="auth-title">Log in to Spotify</h1>
         </div>
 

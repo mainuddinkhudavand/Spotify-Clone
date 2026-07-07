@@ -170,7 +170,7 @@ const Playlists = ({ playlistId, setActiveTab, onPlaylistsUpdated }) => {
         margin: '-1rem -1.5rem 1rem -1.5rem',
         padding: '2.5rem 1.5rem 1.5rem 1.5rem'
       }}>
-        <img src={playlist.coverUrl || '/assets/card3img.jpeg'} className="details-cover" alt={playlist.title} />
+        <img src={playlist.coverUrl || 'assets/card3img.jpeg'} className="details-cover" alt={playlist.title} />
         <div className="details-metadata">
           <span className="details-type">{playlist.isPublic ? 'Public Playlist' : 'Private Playlist'}</span>
           <span className="details-title">{playlist.title}</span>

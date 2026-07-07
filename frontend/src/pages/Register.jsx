@@ -32,7 +32,7 @@ const Register = ({ setActiveTab }) => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <img src="/assets/logo.png" className="auth-logo" alt="Spotify" onError={(e) => e.target.style.display = 'none'} />
+          <img src="assets/logo.png" className="auth-logo" alt="Spotify" onError={(e) => e.target.style.display = 'none'} />
           <h1 className="auth-title">Sign up to start listening</h1>
         </div>
 
