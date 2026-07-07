@@ -40,7 +40,28 @@ const Navbar = ({ activeTab, setActiveTab }) => {
 
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>{user.username}</span>
+            <button 
+              onClick={() => setActiveTab('profile')}
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                border: 'none',
+                color: '#fff',
+                padding: '0.4rem 0.8rem',
+                borderRadius: '100px',
+                fontSize: '0.85rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                transition: 'background-color 0.2s ease'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+            >
+              <i className="fa-regular fa-user"></i>
+              <span>{user.username}</span>
+            </button>
             <button 
               className="user-profile-btn" 
               title="Log Out"

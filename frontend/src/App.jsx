@@ -11,6 +11,7 @@ import History from './pages/History';
 import Playlists from './pages/Playlists';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Profile from './pages/Profile';
 
 const MainApp = () => {
   const { token } = useContext(AuthContext);
@@ -70,6 +71,8 @@ const MainApp = () => {
       return <Login setActiveTab={setActiveTab} />;
     } else if (activeTab === 'register') {
       return <Register setActiveTab={setActiveTab} />;
+    } else if (activeTab === 'profile') {
+      return <Profile setActiveTab={setActiveTab} />;
     } else if (activeTab.startsWith('playlist-')) {
       const playlistId = activeTab.replace('playlist-', '');
       return (
