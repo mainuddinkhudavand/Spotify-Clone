@@ -22,9 +22,15 @@ const MusicPlayer = () => {
     setIsRepeat
   } = useContext(PlayerContext);
 
-  const { likedSongs, likeSong, unlikeSong, user } = useContext(AuthContext);
+  const { likedSongs, likeSong, unlikeSong, user, addNotification } = useContext(AuthContext);
   const [showLyrics, setShowLyrics] = useState(false);
   const [showQueue, setShowQueue] = useState(false);
+
+  React.useEffect(() => {
+    if (currentSong) {
+      addNotification(`Now playing: "${currentSong.title}" by ${currentSong.artist}`);
+    }
+  }, [currentSong]);
 
   const getMockLyrics = (title, artist) => {
     return [

@@ -14,7 +14,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 
 const MainApp = () => {
-  const { token } = useContext(AuthContext);
+  const { token, addNotification } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState('home');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [playlistTitle, setPlaylistTitle] = useState('');
@@ -48,6 +48,7 @@ const MainApp = () => {
         setShowCreateModal(false);
         setPlaylistTitle('');
         setPlaylistDesc('');
+        addNotification(`Playlist "${data.title}" created successfully`);
         // Route to the new playlist
         setActiveTab(`playlist-${data._id}`);
       } else {
