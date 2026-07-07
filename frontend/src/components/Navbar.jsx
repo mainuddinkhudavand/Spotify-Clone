@@ -2,9 +2,22 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 const Navbar = ({ activeTab, setActiveTab }) => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, notifications, clearNotifications } = useContext(AuthContext);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [showInstallModal, setShowInstallModal] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [prevNotifLength, setPrevNotifLength] = useState(notifications ? notifications.length : 0);
+
+  React.useEffect(() => {
+    if (notifications && notifications.length > prevNotifLength) {
+      const diff = notifications.length - prevNotifLength;
+      if (!showNotifications) {
+        setUnreadCount(prev => prev + diff);
+      }
+    }
+    setPrevNotifLength(notifications ? notifications.length : 0);
+  }, [notifications, showNotifications]);
 
   return (
     <div className="sticky-nav">
@@ -40,6 +53,49 @@ const Navbar = ({ activeTab, setActiveTab }) => {
 
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Notification Bell */}
+            <div style={{ position: 'relative' }}>
+              <button 
+                className="user-profile-btn" 
+                title="Notifications"
+                onClick={() => {
+                  setShowNotifications(prev => !prev);
+                  setUnreadCount(0);
+                }}
+                style={{ position: 'relative' }}
+              >
+                <i className="fa-regular fa-bell"></i>
+                {unreadCount > 0 && (
+                  <span className="notification-badge">{unreadCount}</span>
+                )}
+              </button>
+              
+              {showNotifications && (
+                <div className="notifications-popover">
+                  <div className="notifications-popover-header">
+                    <h4>Notifications</h4>
+                    {notifications.length > 0 && (
+                      <button onClick={clearNotifications}>Clear all</button>
+                    )}
+                  </div>
+                  <div className="notifications-popover-body">
+                    {notifications.length === 0 ? (
+                      <p className="no-notifications">No new notifications</p>
+                    ) : (
+                      notifications.map(n => (
+                        <div key={n.id} className="notification-item">
+                          <span className="notification-text">{n.text}</span>
+                          <span className="notification-time">
+                            {new Date(n.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button 
               onClick={() => setActiveTab('profile')}
               style={{
