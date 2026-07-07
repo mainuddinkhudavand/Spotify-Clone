@@ -192,7 +192,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateProfile = async (username, email) => {
+  const updateProfile = async (username, email, profilePic) => {
     if (!token) return { success: false, message: 'Not logged in' };
     try {
       const res = await fetch(`${API_URL}/user/profile`, {
@@ -201,11 +201,16 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ username, email })
+        body: JSON.stringify({ username, email, profilePic })
       });
       const data = await res.json();
       if (res.ok) {
-        setUser(prev => ({ ...prev, username: data.username, email: data.email }));
+        setUser(prev => ({ 
+          ...prev, 
+          username: data.username, 
+          email: data.email, 
+          profilePic: data.profilePic 
+        }));
         return { success: true };
       } else {
         return { success: false, message: data.message || 'Update failed' };
