@@ -137,7 +137,7 @@ router.delete('/history', protect, async (req, res) => {
 // @route   PUT /api/user/profile
 // @access  Private
 router.put('/profile', protect, async (req, res) => {
-  const { username, email } = req.body;
+  const { username, email, profilePic } = req.body;
 
   try {
     const user = await User.findById(req.user.id);
@@ -161,6 +161,10 @@ router.put('/profile', protect, async (req, res) => {
       user.email = email;
     }
 
+    if (profilePic !== undefined) {
+      user.profilePic = profilePic;
+    }
+
     await user.save();
     
     res.json({
@@ -168,7 +172,8 @@ router.put('/profile', protect, async (req, res) => {
       username: user.username,
       email: user.email,
       likedSongs: user.likedSongs,
-      history: user.history
+      history: user.history,
+      profilePic: user.profilePic
     });
   } catch (error) {
     console.error(error);

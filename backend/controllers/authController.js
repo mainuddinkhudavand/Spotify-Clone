@@ -43,6 +43,7 @@ const registerUser = async (req, res) => {
         username: user.username,
         email: user.email,
         token: generateToken(user.id),
+        profilePic: user.profilePic
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
@@ -75,6 +76,7 @@ const loginUser = async (req, res) => {
         username: user.username,
         email: user.email,
         token: generateToken(user.id),
+        profilePic: user.profilePic
       });
     } else {
       res.status(401).json({ message: 'Invalid credentials' });
