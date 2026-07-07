@@ -260,6 +260,7 @@ const MusicPlayer = () => {
             ))}
           </div>
         </div>
+      )}
       {/* Playback Queue Panel */}
       {showQueue && (
         <div style={{

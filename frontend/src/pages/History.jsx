@@ -44,8 +44,7 @@ const History = () => {
     );
   }
 
-  // extract actual song list from history items to play them sequentially
-  const historySongs = history.filter(item => item.song).map(item => item.song);
+
 
   return (
     <div>
