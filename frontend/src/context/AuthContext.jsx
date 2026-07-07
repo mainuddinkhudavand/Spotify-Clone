@@ -192,6 +192,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async (username, email) => {
+    if (!token) return { success: false, message: 'Not logged in' };
+    try {
+      const res = await fetch(`${API_URL}/user/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ username, email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUser(prev => ({ ...prev, username: data.username, email: data.email }));
+        return { success: true };
+      } else {
+        return { success: false, message: data.message || 'Update failed' };
+      }
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+      return { success: false, message: 'Server connection error' };
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -205,7 +229,8 @@ export const AuthProvider = ({ children }) => {
       likeSong,
       unlikeSong,
       addSongToHistory,
-      clearHistory
+      clearHistory,
+      updateProfile
     }}>
       {children}
     </AuthContext.Provider>
