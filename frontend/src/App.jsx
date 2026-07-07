@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthProvider, AuthContext } from './context/AuthContext';
-import { PlayerProvider } from './context/PlayerContext';
+import { PlayerProvider, PlayerContext } from './context/PlayerContext';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import MusicPlayer from './components/MusicPlayer';
@@ -12,16 +12,26 @@ import Playlists from './pages/Playlists';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
+import SongDetail from './pages/SongDetail';
 
 const MainApp = () => {
   const { token, addNotification } = useContext(AuthContext);
+  const { currentSong } = useContext(PlayerContext);
   const [activeTab, setActiveTab] = useState('home');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [playlistTitle, setPlaylistTitle] = useState('');
   const [playlistDesc, setPlaylistDesc] = useState('');
   const [playlistRefresh, setPlaylistRefresh] = useState(0);
+  const [prevSongId, setPrevSongId] = useState(null);
 
   const API_URL = 'http://localhost:5000/api';
+
+  useEffect(() => {
+    if (currentSong && currentSong._id !== prevSongId) {
+      setActiveTab('song-detail');
+      setPrevSongId(currentSong._id);
+    }
+  }, [currentSong, prevSongId]);
 
   const handleCreatePlaylist = async (e) => {
     e.preventDefault();
@@ -74,6 +84,8 @@ const MainApp = () => {
       return <Register setActiveTab={setActiveTab} />;
     } else if (activeTab === 'profile') {
       return <Profile setActiveTab={setActiveTab} />;
+    } else if (activeTab === 'song-detail') {
+      return <SongDetail setActiveTab={setActiveTab} />;
     } else if (activeTab.startsWith('playlist-')) {
       const playlistId = activeTab.replace('playlist-', '');
       return (
@@ -102,7 +114,7 @@ const MainApp = () => {
         </div>
       </div>
       
-      <MusicPlayer />
+      <MusicPlayer setActiveTab={setActiveTab} />
 
       {/* Create Playlist Modal */}
       {showCreateModal && (
