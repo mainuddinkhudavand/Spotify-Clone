@@ -7,6 +7,33 @@ const Favorites = () => {
   const { likedSongs, unlikeSong, token, user } = useContext(AuthContext);
   const [favoriteTracks, setFavoriteTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [filterQuery, setFilterQuery] = useState('');
+  const [sortBy, setSortBy] = useState('dateAdded');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  const filteredAndSortedTracks = favoriteTracks
+    .filter(song => {
+      const query = filterQuery.toLowerCase();
+      return (
+        song.title.toLowerCase().includes(query) ||
+        song.artist.toLowerCase().includes(query) ||
+        song.album.toLowerCase().includes(query)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === 'dateAdded') return 0;
+      let comparison = 0;
+      if (sortBy === 'title') {
+        comparison = a.title.localeCompare(b.title);
+      } else if (sortBy === 'artist') {
+        comparison = a.artist.localeCompare(b.artist);
+      } else if (sortBy === 'album') {
+        comparison = a.album.localeCompare(b.album);
+      } else if (sortBy === 'duration') {
+        comparison = a.duration - b.duration;
+      }
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
 
   const API_URL = 'http://localhost:5000/api';
 
@@ -38,8 +65,8 @@ const Favorites = () => {
   };
 
   const handlePlayAll = () => {
-    if (favoriteTracks.length > 0) {
-      playSong(favoriteTracks[0], favoriteTracks);
+    if (filteredAndSortedTracks.length > 0) {
+      playSong(filteredAndSortedTracks[0], filteredAndSortedTracks);
     }
   };
 
@@ -83,7 +110,7 @@ const Favorites = () => {
           <span className="details-title">Liked Songs</span>
           <span className="details-description">Your personal collection of saved music tracks.</span>
           <span className="details-stats">
-            {user.username} <span className="bullet">•</span> {favoriteTracks.length} songs
+            {user.username} <span className="bullet">•</span> {favoriteTracks.length} songs{filterQuery && ` (${filteredAndSortedTracks.length} matches)`}
           </span>
         </div>
       </div>
@@ -92,27 +119,96 @@ const Favorites = () => {
         <p style={{ opacity: 0.6 }}>Loading favorites...</p>
       ) : favoriteTracks.length > 0 ? (
         <>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', padding: '1rem 0' }}>
-            <button 
-              onClick={handlePlayAll}
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                backgroundColor: '#1ed760',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                transition: 'transform 0.1s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              <i className="fa-solid fa-play" style={{ color: '#000', fontSize: '1.5rem', marginLeft: '5px' }}></i>
-            </button>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', padding: '1rem 0', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+              <button 
+                onClick={handlePlayAll}
+                style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '50%',
+                  backgroundColor: '#1ed760',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                  transition: 'transform 0.1s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <i className="fa-solid fa-play" style={{ color: '#000', fontSize: '1.5rem', marginLeft: '5px' }}></i>
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              {/* Search Bar */}
+              <div className="search-container" style={{ margin: 0, height: '40px', width: '240px', backgroundColor: '#242424' }}>
+                <i className="fa-solid fa-magnifying-glass"></i>
+                <input 
+                  type="text" 
+                  className="search-input" 
+                  placeholder="Search in Liked Songs"
+                  value={filterQuery}
+                  onChange={(e) => setFilterQuery(e.target.value)}
+                  style={{ width: '80%', background: 'transparent', border: 'none', color: '#fff', outline: 'none' }}
+                />
+              </div>
+
+              {/* Sort By Dropdown */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Sort by:</span>
+                <select 
+                  value={sortBy} 
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={{
+                    backgroundColor: '#242424',
+                    color: '#fff',
+                    border: 'none',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '4px',
+                    fontSize: '0.8rem',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="dateAdded">Date Added</option>
+                  <option value="title">Title</option>
+                  <option value="artist">Artist</option>
+                  <option value="album">Album</option>
+                  <option value="duration">Duration</option>
+                </select>
+              </div>
+
+              {/* Sort Order Button */}
+              {sortBy !== 'dateAdded' && (
+                <button 
+                  onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  style={{
+                    backgroundColor: '#242424',
+                    color: '#fff',
+                    border: 'none',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.9rem'
+                  }}
+                  title={sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+                >
+                  {sortOrder === 'asc' ? (
+                    <i className="fa-solid fa-arrow-up-a-z"></i>
+                  ) : (
+                    <i className="fa-solid fa-arrow-down-z-a"></i>
+                  )}
+                </button>
+              )}
+            </div>
           </div>
 
           <table className="songs-table">
@@ -126,7 +222,7 @@ const Favorites = () => {
               </tr>
             </thead>
             <tbody>
-              {favoriteTracks.map((song, index) => {
+              {filteredAndSortedTracks.map((song, index) => {
                 const isSongPlaying = currentSong && currentSong._id === song._id && isPlaying;
                 const isSongActive = currentSong && currentSong._id === song._id;
 
@@ -134,12 +230,12 @@ const Favorites = () => {
                   <tr 
                     key={song._id} 
                     className={`songs-table-row ${isSongActive ? 'active' : ''}`}
-                    onDoubleClick={() => playSong(song, favoriteTracks)}
+                    onDoubleClick={() => playSong(song, filteredAndSortedTracks)}
                   >
-                    <td className="songs-table-index" onClick={() => playSong(song, favoriteTracks)}>
+                    <td className="songs-table-index" onClick={() => playSong(song, filteredAndSortedTracks)}>
                       {index + 1}
                     </td>
-                    <td className="songs-table-play-icon" onClick={() => playSong(song, favoriteTracks)}>
+                    <td className="songs-table-play-icon" onClick={() => playSong(song, filteredAndSortedTracks)}>
                       {isSongPlaying ? (
                         <i className="fa-solid fa-pause"></i>
                       ) : (
