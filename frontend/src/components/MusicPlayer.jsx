@@ -56,11 +56,7 @@ const MusicPlayer = () => {
   };
 
   if (!currentSong) {
-    return (
-      <div className="music-player" style={{ justifyContent: 'center' }}>
-        <p style={{ opacity: 0.6, fontSize: '0.9rem' }}>Select a song to start streaming</p>
-      </div>
-    );
+    return null;
   }
 
   const isLiked = likedSongs.includes(currentSong._id);
