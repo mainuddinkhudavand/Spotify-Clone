@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { PlayerContext } from '../context/PlayerContext';
 import { AuthContext } from '../context/AuthContext';
 
-const MusicPlayer = () => {
+const MusicPlayer = ({ setActiveTab }) => {
   const {
     currentSong,
     isPlaying,
@@ -90,7 +90,14 @@ const MusicPlayer = () => {
   return (
     <div className="music-player">
       {/* Current Album Cover Info */}
-      <div className="album">
+      <div 
+        className="album" 
+        style={{ cursor: 'pointer' }}
+        onClick={(e) => {
+          if (e.target.closest('.album-like-icon')) return;
+          if (setActiveTab) setActiveTab('song-detail');
+        }}
+      >
         <img src={currentSong.coverUrl} className="current-album" alt={currentSong.title} />
         <div className="album-details">
           <span className="album-title">{currentSong.title}</span>
