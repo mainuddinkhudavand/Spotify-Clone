@@ -59,7 +59,15 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
             >
-              <i className="fa-regular fa-user"></i>
+              {user.profilePic ? (
+                <img 
+                  src={user.profilePic} 
+                  style={{ width: '18px', height: '18px', borderRadius: '50%', objectFit: 'cover' }} 
+                  alt="" 
+                />
+              ) : (
+                <i className="fa-regular fa-user"></i>
+              )}
               <span>{user.username}</span>
             </button>
             <button 
