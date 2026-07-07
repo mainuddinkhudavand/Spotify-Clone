@@ -12,14 +12,43 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Database connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/spotify_clone';
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('MongoDB connected successfully.'))
-  .catch((err) => {
-    console.error('MongoDB connection error:', err.message);
-    console.log('Ensure MongoDB service is running locally, or configure a remote string in backend/.env');
-  });
+// Database connection helper with in-memory fallback
+const connectDB = async () => {
+  const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/spotify_clone';
+  try {
+    console.log('Attempting to connect to MongoDB...');
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 3000 // 3 seconds timeout
+    });
+    console.log('MongoDB connected successfully.');
+  } catch (err) {
+    console.warn('\n⚠️  MongoDB connection failed. Starting in-memory MongoDB fallback server...');
+    try {
+      const { MongoMemoryServer } = require('mongodb-memory-server');
+      const mongod = await MongoMemoryServer.create();
+      const inMemoryUri = mongod.getUri();
+      console.log(`🚀 In-Memory MongoDB Server running at: ${inMemoryUri}`);
+      
+      await mongoose.connect(inMemoryUri);
+      console.log('Connected to In-Memory MongoDB successfully.');
+
+      // Auto-seed in-memory database
+      const Song = require('./models/Song');
+      const songCount = await Song.countDocuments();
+      if (songCount === 0) {
+        console.log('Database is empty. Seeding initial songs...');
+        const songsList = require('./data/songs');
+        await Song.insertMany(songsList);
+        console.log(`Seeded ${songsList.length} songs successfully!`);
+      }
+    } catch (memErr) {
+      console.error('CRITICAL: Failed to start in-memory MongoDB:', memErr.message);
+      process.exit(1);
+    }
+  }
+};
+
+connectDB();
 
 // Root route
 app.get('/', (req, res) => {
