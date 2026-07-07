@@ -6,6 +6,7 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
   const { user, token } = useContext(AuthContext);
   const { playSong } = useContext(PlayerContext);
   const [playlists, setPlaylists] = useState([]);
+  const [showPodcastsModal, setShowPodcastsModal] = useState(false);
 
   const API_URL = 'http://localhost:5000/api';
 
@@ -58,9 +59,13 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
       
       <div className="library">
         <div className="options">
-          <div className="lib-option">
+          <div 
+            className="lib-option"
+            onClick={() => setActiveTab('favorites')}
+            style={{ cursor: 'pointer' }}
+          >
             <img src="/assets/library_icon.png" alt="Library" />
-            <a href="#" onClick={(e) => e.preventDefault()}>Your Library</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setActiveTab('favorites'); }}>Your Library</a>
           </div>
           <div className="icons">
             {user && (
@@ -154,10 +159,53 @@ const Sidebar = ({ activeTab, setActiveTab, onCreatePlaylistClick, playlistsRefr
           <div className="box">
             <p className="box-p1">Let's find some podcasts to follow</p>
             <p className="box-p2">We'll keep you updated on new episodes</p>
-            <button className="badge">Browse podcasts</button>
+            <button className="badge" onClick={() => setShowPodcastsModal(true)}>Browse podcasts</button>
           </div>
         </div>
       </div>
+      {/* Podcasts Modal */}
+      {showPodcastsModal && (
+        <div className="modal-overlay" style={{ zIndex: 1100 }}>
+          <div className="modal-content" style={{ maxWidth: '450px' }}>
+            <h3 className="modal-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <i className="fa-solid fa-podcast" style={{ color: '#1ed760' }}></i> Follow Podcasts
+            </h3>
+            <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '1.25rem' }}>Follow your favorite shows to get updates on new episodes.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+              {[
+                { name: "The Daily Tech Talk", creator: "Tech Network", desc: "Your daily dose of tech news and gossip.", listeners: "120K followers" },
+                { name: "Lex Fridman Podcast", creator: "Lex Fridman", desc: "Conversations about science, tech, history, and love.", listeners: "2.4M followers" },
+                { name: "Coding Blocks", creator: "Coding Blocks Team", desc: "Software design, architecture, and engineering discussions.", listeners: "85K followers" },
+                { name: "Syntax - Tasty Web Development", creator: "Wes Bos & Scott Tolinski", desc: "A podcast for web developers.", listeners: "310K followers" }
+              ].map((pod, idx) => (
+                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#181818', padding: '0.75rem 1rem', borderRadius: '8px', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', maxWidth: '70%' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#fff' }}>{pod.name}</span>
+                    <span style={{ fontSize: '0.7rem', color: '#1ed760' }}>{pod.creator} • {pod.listeners}</span>
+                    <span style={{ fontSize: '0.7rem', color: '#b3b3b3', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pod.desc}</span>
+                  </div>
+                  <button 
+                    className="badge" 
+                    style={{ margin: 0, padding: '0.4rem 0.8rem', fontSize: '0.7rem', backgroundColor: '#1ed760', color: '#000', fontWeight: 'bold' }}
+                    onClick={() => { alert(`You are now following "${pod.name}"!`); setShowPodcastsModal(false); }}
+                  >
+                    Follow
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="modal-buttons" style={{ justifyContent: 'center' }}>
+              <button 
+                className="modal-btn modal-btn-cancel" 
+                onClick={() => setShowPodcastsModal(false)}
+                style={{ borderRadius: '100px' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
