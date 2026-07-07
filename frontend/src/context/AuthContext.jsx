@@ -75,6 +75,7 @@ export const AuthProvider = ({ children }) => {
       if (res.ok) {
         localStorage.setItem('token', data.token);
         setToken(data.token);
+        addNotification(`Logged in as @${data.user?.username || 'user'}`);
         return { success: true };
       } else {
         return { success: false, message: data.message || 'Login failed' };
@@ -98,6 +99,7 @@ export const AuthProvider = ({ children }) => {
       if (res.ok) {
         localStorage.setItem('token', data.token);
         setToken(data.token);
+        addNotification('Registered and logged in successfully!');
         return { success: true };
       } else {
         return { success: false, message: data.message || 'Registration failed' };
@@ -114,6 +116,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setLikedSongs([]);
     setHistory([]);
+    addNotification('Logged out successfully');
   };
 
   const likeSong = async (songId) => {
@@ -127,6 +130,7 @@ export const AuthProvider = ({ children }) => {
       });
       if (res.ok) {
         setLikedSongs(prev => [...prev, songId]);
+        addNotification('Added song to Liked Songs');
       }
     } catch (error) {
       console.error('Error liking song:', error);
@@ -144,6 +148,7 @@ export const AuthProvider = ({ children }) => {
       });
       if (res.ok) {
         setLikedSongs(prev => prev.filter(id => id !== songId));
+        addNotification('Removed song from Liked Songs');
       }
     } catch (error) {
       console.error('Error unliking song:', error);
@@ -189,6 +194,7 @@ export const AuthProvider = ({ children }) => {
       });
       if (res.ok) {
         setHistory([]);
+        addNotification('Cleared listening history');
       }
     } catch (error) {
       console.error('Error clearing history:', error);
@@ -214,6 +220,7 @@ export const AuthProvider = ({ children }) => {
           email: data.email, 
           profilePic: data.profilePic 
         }));
+        addNotification('Profile details updated successfully');
         return { success: true };
       } else {
         return { success: false, message: data.message || 'Update failed' };
